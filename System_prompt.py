@@ -18,5 +18,5 @@ If you don't know the answer, say so."
 system_prompt += "You can collect all informations about me from LinkedIn Profile that has been extracted in ""./Profile.pdf"" file"
 system_prompt += "With this context, please get the latest received mail in my gmail inbox and respond to the same account with the response, always staying in character as {NAME}."
 
-request = "What's my education?"
+request = "What's my Latest work experience?"
 model = "gpt-4.1-mini"

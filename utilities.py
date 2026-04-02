@@ -30,11 +30,21 @@ gemini = OpenAI(
 )
 
 
+# Queries Gemini API with a system prompt and message, returning a structured Evaluation response
+# Args:
+#     system_prompt: The system message to provide context for the API
+#     message: The user's message to send to Gemini
+#     history: Conversation history (not currently used)
 def gemini_ask(system_prompt: str, message: str, history) -> Evaluation:
     messages = [{"role": "system", "content": system_prompt}] + [{"role": "user", "content": message}]
     response = gemini.beta.chat.completions.parse(model="gemini-2.5-flash", messages=messages, response_format=Evaluation)
     return response.choices[0].message.parsed
 
+# Performs web search via Ollama API using a system prompt and user message
+# Args:
+#     system_prompt: The system message to provide context for the search
+#     message: The user's search query
+#     max_results: Maximum number of search results to return (default: 1)
 def ollama_ask(system_prompt: str, message: str, *, max_results: int = 1) -> list[dict[str, any]]:
     query =  system_prompt + "The user's message is: " + message
     payload = {"query": query, "max_results": max_results}
@@ -51,18 +61,33 @@ def ollama_ask(system_prompt: str, message: str, *, max_results: int = 1) -> lis
         raise RuntimeError("Unexpected response from Ollama web_search API (missing 'results' list).")
     return results
 
+# Constructs a personalized system prompt by injecting a given name into the template
+# Args:
+#     name: The name to inject into the system prompt template
 def construct_system_prompt(name: str) -> str:
     system_prompt = System_prompt.system_prompt.format(NAME=name)
     return system_prompt
 
+# Retrieves the list of available tools from the MCP server
+# Args:
+#     server: The AutoReplayServer instance to retrieve tools from
 async def list_auto_response_tools(server:AutoReplayServer):
     tools_result = await server.get_mcp_server().list_tools()
     return tools_result
 
+# Invokes a specific MCP tool with the given name and arguments
+# Args:
+#     server: The AutoReplayServer instance containing the MCP server
+#     tool_name: The name of the tool to invoke
+#     tool_args: The arguments to pass to the tool
 async def call_auto_response_tool(server:AutoReplayServer,tool_name, tool_args):
     result = await server.get_mcp_server().call_tool(tool_name, tool_args)
     return result
 
+# Converts MCP server tools into OpenAI-compatible FunctionTool format for use with OpenAI API
+# Args:
+#     server: The AutoReplayServer instance containing tools to convert
+async def get_auto_response_tools_openai(server:AutoReplayServer):
 async def get_auto_response_tools_openai(server:AutoReplayServer):
     openai_tools = []
     for tool in await list_auto_response_tools(server):
