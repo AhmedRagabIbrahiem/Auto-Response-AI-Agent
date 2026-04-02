@@ -4,3 +4,7 @@ I just built an email auto-response AI agent that pulls my professional info dir
 It runs on GPT‑4.1‑mini and follows the # MCP protocol, with three core tools: my LinkedIn profile export (for context), a Gmail function to fetch my latest inbox messages, and another function to send replies with a custom header and body. The result? Relevant, on‑brand responses sent automatically to the right people.
 
 From recruiters to collaboration requests, this agent handles the first touchpoint so I don’t have to. If you’re tired of copy‑paste replies or forgetting to follow up, it’s time to let AI work your inbox. Happy to share how I wired the MCP tools—just drop a comment or DM me. ✉️🤖
+
+
+https://github.com/user-attachments/assets/8000aa1f-efcc-4630-8c61-b042f6691492
+
